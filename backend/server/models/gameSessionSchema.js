@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { mongo } from 'mongoose';
 
 const gameSessionSchema = new mongoose.Schema({
     user: {
@@ -23,3 +23,9 @@ const gameSessionSchema = new mongoose.Schema({
         default: Date.now
     }
 });
+
+gameSessionSchema.index({ user: 1, score: -1 });
+
+const GameSession = mongoose.model('GameSession', gameSessionSchema);
+
+export default GameSession;
