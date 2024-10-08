@@ -8,7 +8,15 @@ import apiRoutes from './routes/apiRoutes.js';
 dotenv.config();
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+    origin: [process.env.DEV_FRONTEND_URL, process.env.PROD_FRONTEND_URL],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI)
