@@ -1,11 +1,16 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = '/api';
 
-export const getUserProfile = async (userId) => {
+export const getUserProfile = async () => {
   try {
-    const response = await axios.get(`${API_URL}/user/${userId}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('No token found');
+    }
+
+    const response = await axios.get(`${API_URL}/user/profile`, {
+      headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
   } catch (error) {

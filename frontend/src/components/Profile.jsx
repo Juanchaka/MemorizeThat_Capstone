@@ -1,46 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { getUserProfile, updateUserProfile } from '../services/userService';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
+import { getUserProfile } from '../services/userService.jsx';
 
 function Profile() {
-  const { user } = useAuth();
   const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchUserProfile();
-  }, []);
+    if (!user) {
+      navigate('/login');
+    } else {
+      fetchUserProfile();
+    }
+  }, [user, navigate]);
 
   const fetchUserProfile = async () => {
     try {
-      const data = await getUserProfile(user.id);
+      setLoading(true);
+      const data = await getUserProfile();
       setProfile(data);
-    } catch (error) {
-      console.error('Failed to fetch user profile:', error);
+    } catch (err) {
+      setError(`Failed to fetch user profile: ${err.message}`);
+      console.error('Error fetching user profile:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleProfileUpdate = async (updatedData) => {
-    try {
-      await updateUserProfile(user.id, updatedData);
-      fetchUserProfile();
-    } catch (error) {
-      console.error('Failed to update user profile:', error);
-    }
-  };
-
-  if (!profile) {
+  if (loading) {
     return <div>Loading profile...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
   }
 
   return (
     <div>
       <h2>User Profile</h2>
-      <div>
-        <p>Username: {profile.username}</p>
-        <p>Email: {profile.email}</p>
-        <p>Total Games: {profile.totalGames}</p>
-        <p>Highest Score: {profile.highestScore}</p>
-      </div>
+      {profile ? (
+        <div>
+          <p>Username: {profile.username}</p>
+          <p>Email: {profile.email}</p>
+        </div>
+      ) : (
+        <p>No profile information available.</p>
+      )}
     </div>
   );
 }

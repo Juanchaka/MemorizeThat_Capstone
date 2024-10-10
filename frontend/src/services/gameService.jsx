@@ -1,24 +1,51 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = '/api';
+
+const authHeader = () => {
+  const token = localStorage.getItem('token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
 
 export const startGame = async () => {
-  const response = await axios.post(`${API_URL}/game`, {}, {
-    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-  });
-  return response.data;
+  try {
+    const response = await axios.post(`${API_URL}/game`, {}, {
+      headers: authHeader()
+    });
+    if (response.data && response.data.id) {
+      return response.data;
+    } else {
+      throw new Error('No game ID received from server');
+    }
+  } catch (error) {
+    console.error('Error starting game:', error);
+    throw error;
+  }
 };
 
-export const endGame = async (gameId, score, timeElapsed) => {
-  const response = await axios.post(`${API_URL}/game/${gameId}`, { score, timeElapsed }, {
-    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-  });
-  return response.data;
+export const endGame = async (gameId, score, time) => {
+  if (!gameId) {
+    throw new Error('No game ID provided');
+  }
+  try {
+    const response = await axios.post(`${API_URL}/game/${gameId}`, { score, time }, {
+      headers: authHeader()
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error ending game:', error);
+    throw error;
+  }
 };
 
-export const getLeaderboard = async () => {
-  const response = await axios.get(`${API_URL}/game/leaderboard`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-  });
-  return response.data;
+export const getGameHistory = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/game/history`, {
+      headers: authHeader()
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching game history:', error);
+    throw error;
+  }
 };
