@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import bycrypt from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -27,16 +27,16 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-userSchema.index({ usaername: 1, email: 1});
+userSchema.index({ username: 1, email: 1 });
 
 userSchema.pre('save', async function(next) {
     if(!this.isModified('password')) return next();
-    this.password = await bycrypt.hash(this.password, 12);
+    this.password = await bcrypt.hash(this.password, 12);
     next();
 });
 
 userSchema.methods.isValidPassword = async function(password) {
-    return await bycrypt.compare(password, this.password);
+    return await bcrypt.compare(password, this.password);
 };
 
 const User = mongoose.model('User', userSchema);

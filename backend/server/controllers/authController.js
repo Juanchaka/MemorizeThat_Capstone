@@ -19,9 +19,22 @@ export const login = async (req, res) => {
         if (!user || !(await user.isValidPassword(password))){
             return res.status(401).json({ message: "Invalid email or password" });
         }
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.json({ token });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        res.json({ token, user: { id: user._id, username: user.username, email: user.email } });
     } catch (err) {
         res.status(400).json({ message: "Login failed", error: err.message });
     }
 };
+
+export const getCurrentUser = async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id).select('-password');
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user);
+    } catch (error) {
+      console.error('Error in getCurrentUser:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
