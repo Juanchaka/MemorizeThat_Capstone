@@ -11,7 +11,7 @@ function Navbar() {
             <ul>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/game">Play Game</Link></li>
-                <li><Link to="/leaderboard">Leaderboard</Link></li>
+                {user && <li><Link to="/highscore">HighScore</Link></li>}
                 <div className="navbar-right">
                     {user ? (
                         <>

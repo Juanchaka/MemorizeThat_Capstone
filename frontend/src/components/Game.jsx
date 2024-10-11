@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Card from './Card';
-import GameControls from './GameControls';
 import { startGame, endGame } from '../services/gameService';
 import { shuffleCards, generateCards } from '../utils/gameUtils';
+import { getCurrentUser } from '../services/authService';
 import '../styles/Game.css';
 
 function Game() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const [cards, setCards] = useState([]);
   const [flippedCards, setFlippedCards] = useState([]);
@@ -20,12 +20,20 @@ function Game() {
   const [gameId, setGameId] = useState(null);
 
   useEffect(() => {
-    if (!user) {
+    const token = localStorage.getItem('token');
+    if (!token) {
       navigate('/login');
+    } else if (!user) {
+      getCurrentUser().then(userData => {
+        setUser(userData);
+      }).catch(error => {
+        console.error('Failed to get current user:', error);
+        navigate('/login');
+      });
     } else {
       initializeGame();
     }
-  }, [user, navigate]);
+  }, [user, navigate, setUser]);
 
   useEffect(() => {
     let timer;
@@ -41,7 +49,7 @@ function Game() {
     try {
       const newGame = await startGame();
       setGameId(newGame.id);
-      const newCards = shuffleCards(generateCards(8));
+      const newCards = shuffleCards(generateCards(6));
       setCards(newCards);
       setFlippedCards([]);
       setMatchedCards([]);
@@ -104,7 +112,14 @@ function Game() {
 
   return (
     <div className="game-container">
-      <GameControls score={score} time={time} moves={moves} onEndGame={endCurrentGame} />
+      <div className="game-controls">
+        <div className="game-info">
+          <span>Score: {score}</span>
+          <span>Time: {time} seconds</span>
+          <span>Moves: {moves}</span>
+        </div>
+        <button className="end-game-button" onClick={endCurrentGame}>End Game</button>
+      </div>
       <div className="card-grid">
         {cards.map(card => (
           <Card 

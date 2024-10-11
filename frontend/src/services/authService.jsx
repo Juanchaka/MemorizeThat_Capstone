@@ -11,7 +11,11 @@ export const loginUser = async (email, password) => {
     return response.data;
   } catch (error) {
     console.error('Login error:', error);
-    throw error;
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error('An unexpected error occurred during login.');
+    }
   }
 };
 
@@ -21,7 +25,11 @@ export const registerUser = async (username, email, password) => {
     return response.data;
   } catch (error) {
     console.error('Registration error:', error);
-    throw error;
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error('An unexpected error occurred during registration.');
+    }
   }
 };
 
@@ -38,7 +46,11 @@ export const getCurrentUser = async () => {
     return response.data;
   } catch (error) {
     console.error('Error fetching current user:', error);
-    throw error;
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error('An unexpected error occurred while fetching user data.');
+    }
   }
 };
 

@@ -1,4 +1,3 @@
-import { mongo } from 'mongoose';
 import GameSession from '../models/gameSessionSchema.js';
 
 export const startGame = async (req, res) => {

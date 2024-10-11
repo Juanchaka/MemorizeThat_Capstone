@@ -1,20 +1,22 @@
+export const generateCards = (pairCount) => {
+  pairCount = Math.floor(pairCount / 2) * 2;
+  if (pairCount * 2 % 4 !== 0) {
+    pairCount += 2;
+  }
+
+  const values = Array.from({ length: pairCount }, (_, i) => i + 1);
+  const pairs = [...values, ...values];
+  return pairs.map((value, index) => ({
+    id: index,
+    value: value,
+  }));
+};
+
 export const shuffleCards = (cards) => {
-    for (let i = cards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [cards[i], cards[j]] = [cards[j], cards[i]];
-    }
-    return cards;
-  };
-  
-  export const calculateScore = (time, flips) => {
-    return Math.max(0, 1000 - (time * 10) - (flips * 5));
-  };
-  
-  export const generateCards = (pairCount = 8) => {
-    const cards = [];
-    for (let i = 0; i < pairCount; i++) {
-      cards.push({ id: i * 2, value: i, isFlipped: false });
-      cards.push({ id: i * 2 + 1, value: i, isFlipped: false });
-    }
-    return cards;
-  };
+  const shuffled = [...cards];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
