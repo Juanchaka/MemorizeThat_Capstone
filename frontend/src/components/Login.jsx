@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { loginUser } from '../services/authService';
+import { useAuth } from '../context/AuthContext';
 import '../styles/Register.css';
 
 function Login() {
@@ -8,12 +8,13 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     try {
-      await loginUser(email, password);
+      await login(email, password);
       navigate('/');
     } catch (err) {
       setError('Invalid email or password');
@@ -43,7 +44,7 @@ function Login() {
           <button type="submit">Login</button>
         </form>
         <p>
-          Don't have an account? <Link to="/register">Register here</Link>
+          Don't have an account? <Link to="/register">Register</Link>
         </p>
       </div>
     </div>

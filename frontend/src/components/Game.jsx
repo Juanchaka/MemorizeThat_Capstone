@@ -67,29 +67,33 @@ function Game() {
 
   const handleCardClick = (clickedCard) => {
     if (flippedCards.length === 2 || matchedCards.includes(clickedCard.id) || flippedCards.includes(clickedCard)) return;
-
+  
     const newFlippedCards = [...flippedCards, clickedCard];
     setFlippedCards(newFlippedCards);
     setMoves(moves + 1);
-
+  
     if (newFlippedCards.length === 2) {
       if (newFlippedCards[0].value === newFlippedCards[1].value) {
-        setMatchedCards([...matchedCards, newFlippedCards[0].id, newFlippedCards[1].id]);
+        const newMatchedCards = [...matchedCards, newFlippedCards[0].id, newFlippedCards[1].id];
+        setMatchedCards(newMatchedCards);
         setScore(score + 10);
         setFlippedCards([]);
+  
+        if (newMatchedCards.length === cards.length) {
+          setTimeout(() => {
+            endCurrentGame();
+          }, 1500);
+        }
       } else {
         setTimeout(() => setFlippedCards([]), 1000);
       }
-    }
-
-    if (matchedCards.length + 2 === cards.length) {
-      endCurrentGame();
     }
   };
 
   const endCurrentGame = async () => {
     setGameOver(true);
     try {
+      console.log('Ending game with time:', time);
       await endGame(gameId, score, time);
     } catch (error) {
       console.error('Failed to end game:', error);

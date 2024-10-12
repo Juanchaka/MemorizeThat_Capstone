@@ -23,12 +23,13 @@ export const startGame = async () => {
   }
 };
 
-export const endGame = async (gameId, score, time) => {
+export const endGame = async (gameId, score, timeElapsed) => {
   if (!gameId) {
     throw new Error('No game ID provided');
   }
   try {
-    const response = await axios.post(`${API_URL}/game/${gameId}`, { score, time }, {
+    console.log('Sending to backend - score:', score, 'timeElapsed:', timeElapsed);
+    const response = await axios.post(`${API_URL}/game/${gameId}`, { score, timeElapsed }, {
       headers: authHeader()
     });
     return response.data;

@@ -7,20 +7,25 @@ function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setErrors([]);
     setSuccessMessage('');
     try {
       const response = await registerUser(username, email, password);
       setSuccessMessage(response.message);
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
-      setError(err.message);
+      if (typeof err === 'object' && err !== null) {
+        const errorMessages = Object.values(err).filter(msg => typeof msg === 'string');
+        setErrors(errorMessages);
+      } else {
+        setErrors(['An unexpected error occurred. Please try again.']);
+      }
     }
   };
 
@@ -28,30 +33,41 @@ function Register() {
     <div className="auth-container">
       <div className="auth-form">
         <h2>Register</h2>
-        {error && <div className="message error-message">{error}</div>}
         {successMessage && <div className="message success-message">{successMessage}</div>}
+        {errors.length > 0 && (
+          <div className="message error-message">
+            <ul>
+              {errors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="form-group">
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
           <button type="submit">Register</button>
         </form>
         <p>

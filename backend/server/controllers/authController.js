@@ -7,17 +7,18 @@ export const register = async (req, res) => {
         const user = new User({ username, email, password });
         await user.save();
         res.status(201).json({ message: `User ${username} successfully registered!` });
-    }  catch (err) {
+    } catch (err) {
         if (err.code === 11000) {
-            return res.status(400).json({ message: 'Username or email already exists.' });
+            return res.status(400).json({ email: 'Username or email already exists.' });
         }
         if (err.name === 'ValidationError') {
-            if (err.errors.password) {
-                return res.status(400).json({ message: 'Password must be at least 6 characters long.' });
+            const errors = {};
+            for (let field in err.errors) {
+                errors[field] = err.errors[field].message;
             }
-            return res.status(400).json({ message: 'Validation error. Please check your input.' });
+            return res.status(400).json(errors);
         }
-        res.status(400).json({ message: "Registration failed. Please try again." });
+        res.status(400).json({ general: "Registration failed. Please try again." });
     }
 };
 

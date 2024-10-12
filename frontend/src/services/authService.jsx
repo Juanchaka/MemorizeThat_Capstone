@@ -25,10 +25,10 @@ export const registerUser = async (username, email, password) => {
     return response.data;
   } catch (error) {
     console.error('Registration error:', error);
-    if (error.response && error.response.data && error.response.data.message) {
-      throw new Error(error.response.data.message);
+    if (error.response && error.response.data) {
+      throw error.response.data;
     } else {
-      throw new Error('An unexpected error occurred during registration.');
+      throw { general: 'An unexpected error occurred during registration.' };
     }
   }
 };
