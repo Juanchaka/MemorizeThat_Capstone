@@ -9,6 +9,15 @@ import { useRef } from "react";
 import "../styles/Game.css";
 
 function Game() {
+  const playSoundWithTimeout = (sound, duration) => {
+    sound.currentTime = 0;
+    sound.play();
+    setTimeout(() => {
+      sound.pause();
+      sound.currentTime = 0;
+    }, duration);
+  };
+
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const [cards, setCards] = useState([]);
@@ -68,10 +77,10 @@ function Game() {
 
   const initializeGame = async () => {
     try {
-      gameStartSound.current.play();
+      playSoundWithTimeout(gameStartSound.current, 1150);
       const newGame = await startGame();
       setGameId(newGame.id);
-      const newCards = shuffleCards(generateCards(6));
+      const newCards = shuffleCards(generateCards(10));
       setCards(newCards);
       preloadImages(newCards);
       setFlippedCards([]);
@@ -108,12 +117,12 @@ function Game() {
     setMoves(moves + 1);
 
     if (flippedCards.length === 0) {
-      flipSound.current.play();
+      playSoundWithTimeout(flipSound.current, 500);
     }
-    
+
     if (newFlippedCards.length === 2) {
       if (newFlippedCards[0].value === newFlippedCards[1].value) {
-        matchSound.current.play();
+        playSoundWithTimeout(matchSound.current, 2000);
         const newMatchedCards = [
           ...matchedCards,
           newFlippedCards[0].id,
@@ -125,12 +134,12 @@ function Game() {
 
         if (newMatchedCards.length === cards.length) {
           setTimeout(() => {
-            gameCompleteSound.current.play();
+            playSoundWithTimeout(gameCompleteSound.current, 2000);
             endCurrentGame();
           }, 2000);
         }
       } else {
-        noMatchSound.current.play();
+        playSoundWithTimeout(noMatchSound.current, 600);
         setTimeout(() => setFlippedCards([]), 1000);
       }
     }
