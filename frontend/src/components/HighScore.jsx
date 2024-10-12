@@ -23,13 +23,9 @@ function HighScore() {
     try {
       setLoading(true);
       const data = await getGameHistory();
-
-      console.log('Received high scores:', data);
-
       setHighScores(data);
     } catch (err) {
       setError('Failed to fetch high scores');
-      console.error('Error fetching high scores:', err);
     } finally {
       setLoading(false);
     }
@@ -56,7 +52,6 @@ function HighScore() {
               <tr key={entry._id}>
                 <td>{index + 1}</td>
                 <td>{entry.score}</td>
-                {/* <td>{entry.timeElapsed}s</td> */}
                 <td>{entry.timeElapsed ? `${entry.timeElapsed}s` : 'N/A'}</td>
               </tr>
             ))}

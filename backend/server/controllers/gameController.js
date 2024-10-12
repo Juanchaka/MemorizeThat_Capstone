@@ -14,7 +14,6 @@ export const endGame = async (req, res) => {
     try {
         const gameId = req.params.id;
         const { score, timeElapsed } = req.body;
-        console.log('Received from frontend - score:', score, 'timeElapsed:', timeElapsed);
         const updatedGame = await GameSession.findByIdAndUpdate(
             gameId,
             { score, timeElapsed, completed: true },
@@ -25,7 +24,6 @@ export const endGame = async (req, res) => {
         }
         res.json(updatedGame);
     } catch (err) {
-        console.error('Error in endGame:', err);
         res.status(400).json({message: "There was a problem ending the game.", error: err.message});
     }
 };
@@ -39,9 +37,6 @@ export const gameHistory = async (req, res) => {
         .populate('user', 'username')
         .sort({ score: -1, timeElapsed: 1 })
         .limit(10);
-
-        console.log('Retrieved games:', games);
-
         res.json(games);
     } catch (err) {
 
