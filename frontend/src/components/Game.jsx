@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import Card from './Card';
-import { startGame, endGame } from '../services/gameService';
-import { shuffleCards, generateCards } from '../utils/gameUtils';
-import { getCurrentUser } from '../services/authService';
-import '../styles/Game.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import Card from "./Card";
+import { startGame, endGame } from "../services/gameService";
+import { shuffleCards, generateCards } from "../utils/gameUtils";
+import { getCurrentUser } from "../services/authService";
+import { useRef } from "react";
+import "../styles/Game.css";
 
 function Game() {
   const { user, setUser } = useAuth();
@@ -19,17 +20,37 @@ function Game() {
   const [time, setTime] = useState(0);
   const [gameId, setGameId] = useState(null);
 
+  const flipSound = useRef(new Audio("/card_sound/cardFlip/cardFlip.mp3"));
+  
+  const matchSound = useRef(
+    new Audio("/card_sound/success/success_yaaas.mp3")
+  );
+ 
+  const noMatchSound = useRef(
+    new Audio("/card_sound/incorrect/wrong_wowomp.mp3")
+  );
+ 
+  const gameStartSound = useRef(
+    new Audio("/card_sound/startGame/new_level.mp3")
+  );
+ 
+  const gameCompleteSound = useRef(
+    new Audio("/card_sound/endGame/level_complete.mp3")
+  );
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      navigate('/login');
+      navigate("/login");
     } else if (!user) {
-      getCurrentUser().then(userData => {
-        setUser(userData);
-      }).catch(error => {
-        console.error('Failed to get current user:', error);
-        navigate('/login');
-      });
+      getCurrentUser()
+        .then((userData) => {
+          setUser(userData);
+        })
+        .catch((error) => {
+          console.error("Failed to get current user:", error);
+          navigate("/login");
+        });
     } else {
       initializeGame();
     }
@@ -47,6 +68,7 @@ function Game() {
 
   const initializeGame = async () => {
     try {
+      gameStartSound.current.play();
       const newGame = await startGame();
       setGameId(newGame.id);
       const newCards = shuffleCards(generateCards(6));
@@ -59,40 +81,56 @@ function Game() {
       setTime(0);
       setGameOver(false);
     } catch (error) {
-      console.error('Failed to start game:', error);
+      console.error("Failed to start game:", error);
       if (error.response && error.response.status === 401) {
-        navigate('/login');
+        navigate("/login");
       }
     }
   };
 
   const preloadImages = (cards) => {
-    cards.forEach(card => {
+    cards.forEach((card) => {
       const img = new Image();
       img.src = card.imageUrl;
     });
   };
 
   const handleCardClick = (clickedCard) => {
-    if (flippedCards.length === 2 || matchedCards.includes(clickedCard.id) || flippedCards.includes(clickedCard)) return;
-  
+    if (
+      flippedCards.length === 2 ||
+      matchedCards.includes(clickedCard.id) ||
+      flippedCards.includes(clickedCard)
+    )
+      return;
+
     const newFlippedCards = [...flippedCards, clickedCard];
     setFlippedCards(newFlippedCards);
     setMoves(moves + 1);
-  
+
+    if (flippedCards.length === 0) {
+      flipSound.current.play();
+    }
+    
     if (newFlippedCards.length === 2) {
       if (newFlippedCards[0].value === newFlippedCards[1].value) {
-        const newMatchedCards = [...matchedCards, newFlippedCards[0].id, newFlippedCards[1].id];
+        matchSound.current.play();
+        const newMatchedCards = [
+          ...matchedCards,
+          newFlippedCards[0].id,
+          newFlippedCards[1].id,
+        ];
         setMatchedCards(newMatchedCards);
         setScore(score + 10);
         setFlippedCards([]);
-  
+
         if (newMatchedCards.length === cards.length) {
           setTimeout(() => {
+            gameCompleteSound.current.play();
             endCurrentGame();
-          }, 1500);
+          }, 2000);
         }
       } else {
+        noMatchSound.current.play();
         setTimeout(() => setFlippedCards([]), 1000);
       }
     }
@@ -103,7 +141,7 @@ function Game() {
     try {
       await endGame(gameId, score, time);
     } catch (error) {
-      console.error('Failed to end game:', error);
+      console.error("Failed to end game:", error);
     }
   };
 
@@ -129,15 +167,19 @@ function Game() {
           <span>Time: {time} seconds</span>
           <span>Moves: {moves}</span>
         </div>
-        <button className="end-game-button" onClick={endCurrentGame}>End Game</button>
+        <button className="end-game-button" onClick={endCurrentGame}>
+          End Game
+        </button>
       </div>
       <div className="card-grid">
-        {cards.map(card => (
-          <Card 
-            key={card.id} 
-            card={card} 
-            isFlipped={flippedCards.includes(card) || matchedCards.includes(card.id)}
-            onCardClick={() => handleCardClick(card)} 
+        {cards.map((card) => (
+          <Card
+            key={card.id}
+            card={card}
+            isFlipped={
+              flippedCards.includes(card) || matchedCards.includes(card.id)
+            }
+            onCardClick={() => handleCardClick(card)}
           />
         ))}
       </div>
