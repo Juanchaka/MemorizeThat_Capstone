@@ -11,7 +11,6 @@ export const generateCards = (pairCount) => {
     const randomIndex = Math.floor(Math.random() * totalImages) + 1;
     if (!selectedIndices.includes(randomIndex)) {
       selectedIndices.push(randomIndex);
-      console.log(`Selected image: card-${randomIndex}.jpg`);
     }
   }
 
