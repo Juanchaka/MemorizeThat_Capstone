@@ -51,6 +51,7 @@ function Game() {
       setGameId(newGame.id);
       const newCards = shuffleCards(generateCards(6));
       setCards(newCards);
+      preloadImages(newCards);
       setFlippedCards([]);
       setMatchedCards([]);
       setMoves(0);
@@ -63,6 +64,13 @@ function Game() {
         navigate('/login');
       }
     }
+  };
+
+  const preloadImages = (cards) => {
+    cards.forEach(card => {
+      const img = new Image();
+      img.src = card.imageUrl;
+    });
   };
 
   const handleCardClick = (clickedCard) => {
@@ -93,7 +101,6 @@ function Game() {
   const endCurrentGame = async () => {
     setGameOver(true);
     try {
-      console.log('Ending game with time:', time);
       await endGame(gameId, score, time);
     } catch (error) {
       console.error('Failed to end game:', error);

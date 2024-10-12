@@ -28,13 +28,23 @@ export const generateCards = (pairCount) => {
     pairCount += 2;
   }
 
-  const values = Array.from({ length: pairCount }, (_, i) => i + 1);
-  const pairs = [...values, ...values];
-  return pairs.map((value, index) => ({
+  const totalImages = 20;
+  const selectedIndices = [];
+
+  while (selectedIndices.length < pairCount) {
+    const randomIndex = Math.floor(Math.random() * totalImages) + 1;
+    if (!selectedIndices.includes(randomIndex)) {
+      selectedIndices.push(randomIndex);
+      console.log(`Selected image: card-${randomIndex}.jpg`);
+    }
+  }
+
+  const pairs = [...selectedIndices, ...selectedIndices];
+  return shuffleCards(pairs.map((value, index) => ({
     id: index,
     value: value,
-    imageUrl: `../assets/card_front/cars-${value}.jpg`
-  }));
+    imageUrl: `/cards_front/card-${value}.jpg`
+  })));
 };
 
 export const shuffleCards = (cards) => {
