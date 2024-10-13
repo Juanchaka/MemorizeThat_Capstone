@@ -3,7 +3,7 @@ services:
     name: memorizethat-backend
     env: node
     buildCommand: npm install && cd backend && npm install
-    startCommand: cd backend && node server/server.js
+    startCommand: cd backend/server && node server.js
     envVars:
       - key: MONGODB_URI
         sync: false
