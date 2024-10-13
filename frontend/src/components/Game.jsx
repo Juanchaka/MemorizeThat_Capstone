@@ -47,6 +47,8 @@ function Game() {
     new Audio("/card_sound/endGame/level_complete.mp3")
   );
 
+  const endGameSound = useRef(new Audio("/card_sound/endGame/level_complete3.mp3"));
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -148,6 +150,7 @@ function Game() {
 
   const endCurrentGame = async () => {
     setGameOver(true);
+    playSoundWithTimeout(endGameSound.current, 1900);
     try {
       await endGame(gameId, score, time);
     } catch (error) {
