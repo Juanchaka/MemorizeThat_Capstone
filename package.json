@@ -2,7 +2,7 @@
     "name": "memorizethat",
     "version": "1.0.0",
     "scripts": {
-      "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+      "install-all": "npm install && cd frontend && npm install && cd ../backend/server && npm install",
       "build": "cd frontend && npm run build",
       "start": "cd backend/server && node server.js"
     }
