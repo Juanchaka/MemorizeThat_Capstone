@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://memorize-that.onrender.com/api';
+const API_URL = 'https://memorize-that.onrender.com';
 
 const authHeader = () => {
   const token = localStorage.getItem('token');

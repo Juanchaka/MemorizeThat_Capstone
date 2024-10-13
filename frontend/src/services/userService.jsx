@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://memorize-that.onrender.com/api';
+const API_URL = 'https://memorize-that.onrender.com';
 
 export const getUserProfile = async () => {
   try {

@@ -22,11 +22,11 @@ mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log("Successfully connected to MongoDB"))
 .catch(err => console.error("Error connecting to MongoDB:", err));
 
-app.use('/api', apiRoutes);
+app.use('/', apiRoutes);
 
-app.get('/', (req, res) => {
-    res.json({ message: 'Welcome to the MemorizeThat API' });
-  });
+router.get('/', (req, res) => {
+    res.json({ message: 'Welcome to the API routes' });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
