@@ -3,12 +3,19 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import apiRoutes from './routes/apiRoutes.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-dotenv.config();
+
 const app = express();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+
 const corsOptions = {
-    origin: ['https://juanchaka.github.io', 'http://localhost:5173'],
+    origin: ['https://juanchaka.github.io', 'http://localhost:5173', 'http://localhost:5000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
