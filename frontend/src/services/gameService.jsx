@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.NODE_ENV === 'production' 
+const API_URL = import.meta.env.VITE_API_URL === 'production' 
   ? 'https://memorizethat-backend.onrender.com/api' 
   : '/api';
 
