@@ -29,25 +29,25 @@ function Game() {
   const [time, setTime] = useState(0);
   const [gameId, setGameId] = useState(null);
 
-  const flipSound = useRef(new Audio("/card_sound/cardFlip/cardFlip.mp3"));
+  const flipSound = useRef(new Audio(`${process.env.PUBLIC_URL}/card_sound/cardFlip/cardFlip.mp3`));
   
   const matchSound = useRef(
-    new Audio("/card_sound/success/success_yaaas.mp3")
+    new Audio(`${process.env.PUBLIC_URL}/card_sound/success/success_yaaas.mp3`)
   );
  
   const noMatchSound = useRef(
-    new Audio("/card_sound/incorrect/wrong_wowomp.mp3")
+    new Audio(`${process.env.PUBLIC_URL}/card_sound/incorrect/wrong_wowomp.mp3`)
   );
  
   const gameStartSound = useRef(
-    new Audio("/card_sound/startGame/new_level.mp3")
+    new Audio(`${process.env.PUBLIC_URL}/card_sound/startGame/new_level.mp3`)
   );
  
   const gameCompleteSound = useRef(
-    new Audio("/card_sound/endGame/level_complete.mp3")
+    new Audio(`${process.env.PUBLIC_URL}/card_sound/endGame/level_complete.mp3`)
   );
 
-  const endGameSound = useRef(new Audio("/card_sound/endGame/level_complete3.mp3"));
+  const endGameSound = useRef(new Audio(`${process.env.PUBLIC_URL}/card_sound/endGame/level_complete3.mp3`));
 
   useEffect(() => {
     const token = localStorage.getItem("token");

@@ -1,5 +1,6 @@
 {
   "name": "frontend",
+  "homepage": "https://juanchaka.github.io/memorizethat",
   "private": true,
   "version": "0.0.0",
   "type": "module",
