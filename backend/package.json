@@ -1,13 +1,14 @@
 {
-  "name": "memorizethat_capstone",
+  "name": "memorizethat",
   "version": "1.0.0",
   "type": "module",
-  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "build": "echo 'No build step for backend'"
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "build": "cd frontend && npm run build && cd ../backend && npm run build",
+    "start": "cd backend && npm start",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
