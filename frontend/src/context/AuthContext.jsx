@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
           const userData = await getCurrentUser();
           setUser(userData);
         } catch (error) {
-          console.error('Failed to verify user:', error);
           localStorage.removeItem('token');
         }
       }
@@ -32,7 +31,6 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', userData.token);
       return userData;
     } catch (error) {
-      console.error('Login failed:', error);
       throw error;
     }
   };

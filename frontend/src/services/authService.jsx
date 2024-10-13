@@ -10,7 +10,6 @@ export const loginUser = async (email, password) => {
     }
     return response.data;
   } catch (error) {
-    console.error('Login error:', error);
     if (error.response && error.response.data && error.response.data.message) {
       throw new Error(error.response.data.message);
     } else {
@@ -24,7 +23,6 @@ export const registerUser = async (username, email, password) => {
     const response = await axios.post(`${API_URL}/register`, { username, email, password });
     return response.data;
   } catch (error) {
-    console.error('Registration error:', error);
     if (error.response && error.response.data) {
       throw error.response.data;
     } else {
@@ -45,12 +43,32 @@ export const getCurrentUser = async () => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching current user:', error);
     if (error.response && error.response.data && error.response.data.message) {
       throw new Error(error.response.data.message);
     } else {
       throw new Error('An unexpected error occurred while fetching user data.');
     }
+  }
+};
+
+export const updateUser = async (userData) => {
+  try {
+    const response = await axios.put(`${API_URL}/user/profile`, userData, {
+      headers: authHeader()
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteUser = async () => {
+  try {
+    await axios.delete(`${API_URL}/user/profile`, {
+      headers: authHeader()
+    });
+  } catch (error) {
+    throw error;
   }
 };
 
