@@ -15,16 +15,15 @@ export default defineConfig({
   },
   publicDir: 'public',
   define: {
-    'process.env.PUBLIC_URL': process.env.NODE_ENV === 'production' ? '"/MemorizeThat_Capstone"' : '"/"'
+    'process.env.BASE_URL': process.env.NODE_ENV === 'production' ? '"/MemorizeThat_Capstone"' : '"/"'
   },
   server: {
     proxy: {
-      '/api': {
+      '/': {
         target: process.env.NODE_ENV === 'production' 
         ? 'https://memorize-that.onrender.com'
         : 'http://localhost:5000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
       },
     },
   },
