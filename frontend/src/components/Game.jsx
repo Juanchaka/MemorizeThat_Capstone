@@ -29,25 +29,25 @@ function Game() {
   const [time, setTime] = useState(0);
   const [gameId, setGameId] = useState(null);
 
-  const flipSound = useRef(new Audio("/MemorizeThat_Capstone/card_sound/cardFlip/cardFlip.mp3"));
+  const flipSound = useRef(new Audio(`${import.meta.env.BASE_URL}/card_sound/cardFlip/cardFlip.mp3`));
   
   const matchSound = useRef(
-    new Audio("/MemorizeThat_Capstone/card_sound/success/success_yaaas.mp3")
+    new Audio(`${import.meta.env.BASE_URL}/card_sound/success/success_yaaas.mp3`)
   );
  
   const noMatchSound = useRef(
-    new Audio("/MemorizeThat_Capstone/card_sound/incorrect/wrong_wowomp.mp3")
+    new Audio(`${import.meta.env.BASE_URL}/card_sound/incorrect/wrong_wowomp.mp3`)
   );
  
   const gameStartSound = useRef(
-    new Audio("/MemorizeThat_Capstone/card_sound/startGame/new_level.mp3")
+    new Audio(`${import.meta.env.BASE_URL}/card_sound/startGame/new_level.mp3`)
   );
  
   const gameCompleteSound = useRef(
-    new Audio("/MemorizeThat_Capstone/card_sound/endGame/level_complete.mp3")
+    new Audio(`${import.meta.env.BASE_URL}/card_sound/endGame/level_complete.mp3`)
   );
 
-  const endGameSound = useRef(new Audio("/MemorizeThat_Capstone/card_sound/endGame/level_complete3.mp3"));
+  const endGameSound = useRef(new Audio(`${import.meta.env.BASE_URL}/card_sound/endGame/level_complete3.mp3`));
 
   useEffect(() => {
     const token = localStorage.getItem("token");
