@@ -9,13 +9,17 @@ import { useRef } from "react";
 import "../styles/Game.css";
 
 function Game() {
+  const [canPlaySound, setCanPlaySound] = useState(false);
+
   const playSoundWithTimeout = (sound, duration) => {
-    sound.currentTime = 0;
-    sound.play();
-    setTimeout(() => {
-      sound.pause();
+        if (canPlaySound) {
       sound.currentTime = 0;
-    }, duration);
+      sound.play().catch(error => console.error('Error playing sound:', error));
+      setTimeout(() => {
+        sound.pause();
+        sound.currentTime = 0;
+      }, duration);
+    }
   };
 
   const { user, setUser } = useAuth();
@@ -29,25 +33,25 @@ function Game() {
   const [time, setTime] = useState(0);
   const [gameId, setGameId] = useState(null);
 
-  const flipSound = useRef(new Audio(`${process.env.PUBLIC_URL}/card_sound/cardFlip/cardFlip.mp3`));
+  const flipSound = useRef(new Audio(`/card_sound/cardFlip/cardFlip.mp3`));
   
   const matchSound = useRef(
-    new Audio(`${process.env.PUBLIC_URL}/card_sound/success/success_yaaas.mp3`)
+    new Audio(`/card_sound/success/success_yaaas.mp3`)
   );
  
   const noMatchSound = useRef(
-    new Audio(`${process.env.PUBLIC_URL}/card_sound/incorrect/wrong_wowomp.mp3`)
+    new Audio(`/card_sound/incorrect/wrong_wowomp.mp3`)
   );
  
   const gameStartSound = useRef(
-    new Audio(`${process.env.PUBLIC_URL}/card_sound/startGame/new_level.mp3`)
+    new Audio(`/card_sound/startGame/new_level.mp3`)
   );
  
   const gameCompleteSound = useRef(
-    new Audio(`${process.env.PUBLIC_URL}/card_sound/endGame/level_complete.mp3`)
+    new Audio(`/card_sound/endGame/level_complete.mp3`)
   );
 
-  const endGameSound = useRef(new Audio(`${process.env.PUBLIC_URL}/card_sound/endGame/level_complete3.mp3`));
+  const endGameSound = useRef(new Audio(`/card_sound/endGame/level_complete3.mp3`));
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -77,9 +81,25 @@ function Game() {
     return () => clearInterval(timer);
   }, [gameOver, gameId]);
 
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      setCanPlaySound(true);
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
+    };
+
+    document.addEventListener('click', handleUserInteraction);
+    document.addEventListener('keydown', handleUserInteraction);
+
+    return () => {
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
+    };
+  }, []);
+
   const initializeGame = async () => {
     try {
-      playSoundWithTimeout(gameStartSound.current, 1150);
+
       const newGame = await startGame();
       setGameId(newGame.id);
       const newCards = shuffleCards(generateCards(8));
@@ -92,6 +112,10 @@ function Game() {
       setScore(0);
       setTime(0);
       setGameOver(false);
+
+      setTimeout(() => {
+        playSoundWithTimeout(gameStartSound.current, 1150);
+      }, 100);
     } catch (error) {
       console.error("Failed to start game:", error);
       if (error.response && error.response.status === 401) {
@@ -173,7 +197,7 @@ function Game() {
   }
 
   return (
-    <div className="game-container">
+    <div className="game-container" onClick={() => setCanPlaySound(true)}>
       <div className="game-controls">
         <div className="game-info">
           <span>Score: {score}</span>
