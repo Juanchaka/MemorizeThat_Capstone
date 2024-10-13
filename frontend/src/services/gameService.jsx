@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL === 'production' 
-  ? 'https://memorizethat-backend.onrender.com/api' 
-  : '/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://memorizethat-backend.onrender.com/api';
 
 const authHeader = () => {
   const token = localStorage.getItem('token');
