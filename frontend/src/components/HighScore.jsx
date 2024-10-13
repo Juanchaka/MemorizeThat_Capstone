@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { getGameHistory } from '../services/gameService';
+import { useAuth } from '../context/AuthContext.jsx';
+import { getGameHistory } from '../services/gameService.jsx';
 import '../styles/HighScore.css';
 
 function HighScore() {

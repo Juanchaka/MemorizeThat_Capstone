@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.jsx";
 import Card from "./Card";
-import { startGame, endGame } from "../services/gameService";
-import { shuffleCards, generateCards } from "../utils/gameUtils";
-import { getCurrentUser } from "../services/authService";
+import { startGame, endGame } from "../services/gameService.jsx";
+import { shuffleCards, generateCards } from "../utils/gameUtils.jsx";
+import { getCurrentUser } from "../services/authService.jsx";
 import { useRef } from "react";
 import "../styles/Game.css";
 
@@ -29,25 +29,25 @@ function Game() {
   const [time, setTime] = useState(0);
   const [gameId, setGameId] = useState(null);
 
-  const flipSound = useRef(new Audio(`${import.meta.env.BASE_URL}/card_sound/cardFlip/cardFlip.mp3`));
+  const flipSound = useRef(new Audio(`${process.env.PUBLIC_URL}/card_sound/cardFlip/cardFlip.mp3`));
   
   const matchSound = useRef(
-    new Audio(`${import.meta.env.BASE_URL}/card_sound/success/success_yaaas.mp3`)
+    new Audio(`${process.env.PUBLIC_URL}/card_sound/success/success_yaaas.mp3`)
   );
  
   const noMatchSound = useRef(
-    new Audio(`${import.meta.env.BASE_URL}/card_sound/incorrect/wrong_wowomp.mp3`)
+    new Audio(`${process.env.PUBLIC_URL}/card_sound/incorrect/wrong_wowomp.mp3`)
   );
  
   const gameStartSound = useRef(
-    new Audio(`${import.meta.env.BASE_URL}/card_sound/startGame/new_level.mp3`)
+    new Audio(`${process.env.PUBLIC_URL}/card_sound/startGame/new_level.mp3`)
   );
  
   const gameCompleteSound = useRef(
-    new Audio(`${import.meta.env.BASE_URL}/card_sound/endGame/level_complete.mp3`)
+    new Audio(`${process.env.PUBLIC_URL}/card_sound/endGame/level_complete.mp3`)
   );
 
-  const endGameSound = useRef(new Audio(`${import.meta.env.BASE_URL}/card_sound/endGame/level_complete3.mp3`));
+  const endGameSound = useRef(new Audio(`${process.env.PUBLIC_URL}/card_sound/endGame/level_complete3.mp3`));
 
   useEffect(() => {
     const token = localStorage.getItem("token");

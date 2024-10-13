@@ -7,6 +7,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
   },
+  define: {
+    'process.env.PUBLIC_URL': '"/MemorizeThat_Capstone"',
+  },
   server: {
     proxy: {
       '/api': {
