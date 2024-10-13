@@ -1,9 +1,0 @@
-{
-    "name": "memorizethat",
-    "version": "1.0.0",
-    "scripts": {
-      "install-all": "npm install && cd frontend && npm install && cd ../backend/server && npm install",
-      "build": "cd frontend && npm install && npm run build && cd ../backend && npm install --verbose && cd server && ls -la",
-      "start": "cd backend/server && node server.js"
-    }
-  }
