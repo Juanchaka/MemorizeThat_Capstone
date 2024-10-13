@@ -6,7 +6,14 @@ export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/MemorizeThat_Capstone/' : '/',
   build: {
     outDir: 'dist',
+    assetsDir: 'assets',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
   },
+  publicDir: 'public',
   define: {
     'process.env.PUBLIC_URL': process.env.NODE_ENV === 'production' ? '"/MemorizeThat_Capstone"' : '"/"'
   },
