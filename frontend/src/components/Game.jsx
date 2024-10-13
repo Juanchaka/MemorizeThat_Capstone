@@ -80,8 +80,9 @@ function Game() {
       playSoundWithTimeout(gameStartSound.current, 1150);
       const newGame = await startGame();
       setGameId(newGame.id);
-      const newCards = shuffleCards(generateCards(10));
+      const newCards = shuffleCards(generateCards(8));
       setCards(newCards);
+
       preloadImages(newCards);
       setFlippedCards([]);
       setMatchedCards([]);
@@ -175,10 +176,10 @@ function Game() {
           <span>Score: {score}</span>
           <span>Time: {time} seconds</span>
           <span>Moves: {moves}</span>
-        </div>
         <button className="end-game-button" onClick={endCurrentGame}>
           End Game
         </button>
+        </div>
       </div>
       <div className="card-grid">
         {cards.map((card) => (

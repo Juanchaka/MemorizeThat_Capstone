@@ -1,30 +1,45 @@
+:root {
+  --grid-columns: 4;
+  --grid-gap: 0.5rem;
+  --navbar-height: 60px;
+  --controls-height: 40px;
+  --available-height: calc(100vh - var(--navbar-height) - var(--controls-height) - 2rem);
+  --card-size: min(
+    calc((100vw - 2rem - (var(--grid-columns) - 1) * var(--grid-gap)) / var(--grid-columns)),
+    calc(var(--available-height) / 4 - var(--grid-gap))
+  );
+}
+
 .game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  min-height: 100vh;
-  padding: 80px 1rem 1rem;
+  min-height: calc(100vh - 60px);
+  padding: 1rem;
+  margin-top: 60px;
   box-sizing: border-box;
   background-color: #242424;
   color: azure;
-  align-items: center;
 }
 
 .game-controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 600px;
+  max-width: calc(var(--card-size) * var(--grid-columns) + var(--grid-gap) * (var(--grid-columns) - 1));
+  height: var(--controls-height);
   margin-bottom: 1rem;
 }
 
 .game-info {
   display: flex;
-  justify-content: space-around;
-  flex-grow: 1;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 80%;
 }
 
 .end-game-button {
@@ -39,20 +54,19 @@
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 0.5rem;
-  max-width: 600px;
-  margin-top: 2rem;
-  justify-content: center;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: var(--grid-gap);
+  width: 100%;
+  max-width: calc(var(--card-size) * var(--grid-columns) + var(--grid-gap) * (var(--grid-columns) - 1));
+  margin: 0 auto;
 }
 
 .card {
   aspect-ratio: 3/4;
   width: 100%;
-  max-width: 130px;
+  height: var(--card-size);
   perspective: 1000px;
   cursor: pointer;
-  margin: 0 auto;
 }
 
 .card-inner {

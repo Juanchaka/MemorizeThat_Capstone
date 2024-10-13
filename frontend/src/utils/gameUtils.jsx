@@ -1,13 +1,14 @@
 export const generateCards = (pairCount) => {
-  pairCount = Math.floor(pairCount / 2) * 2;
-  if (pairCount * 2 % 4 !== 0) {
-    pairCount += 2;
-  }
+
+  const totalCards = pairCount * 2;
+  const gridColumns = getComputedStyle(document.documentElement).getPropertyValue('--grid-columns');
+  const adjustedTotalCards = Math.ceil(totalCards / gridColumns) * gridColumns;
+  const adjustedPairCount = adjustedTotalCards / 2;
 
   const totalImages = 30;
   const selectedIndices = [];
 
-  while (selectedIndices.length < pairCount) {
+  while (selectedIndices.length < adjustedPairCount) {
     const randomIndex = Math.floor(Math.random() * totalImages) + 1;
     if (!selectedIndices.includes(randomIndex)) {
       selectedIndices.push(randomIndex);
