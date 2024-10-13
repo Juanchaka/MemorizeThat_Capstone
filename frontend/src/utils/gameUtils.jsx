@@ -19,7 +19,7 @@ export const generateCards = (pairCount) => {
   return shuffleCards(pairs.map((value, index) => ({
     id: index,
     value: value,
-    imageUrl: `/cards_front/card-${value}.jpg`
+    imageUrl: `${import.meta.env.BASE_URL}cards_front/card-${value}.jpg`
   })));
 };
 

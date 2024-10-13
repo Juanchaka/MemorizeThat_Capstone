@@ -11,7 +11,7 @@ function Card({ card, isFlipped, onCardClick }) {
     <div className={`card ${isFlipped ? 'flipped' : ''}`} onClick={onCardClick}>
       <div className="card-inner">
         <div className="card-back">
-          <img src="/card_back/cardback.jpg" alt="Card Back" onError={handleImageError}/>
+          <img src={`${import.meta.env.BASE_URL}card_back/cardback.jpg`} alt="Card Back" onError={handleImageError}/>
         </div>
         <div className="card-front">
           <img src={card.imageUrl} alt={card.value} />
