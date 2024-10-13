@@ -24,7 +24,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 app.use('/', apiRoutes);
 
-router.get('/', (req, res) => {
+app.get('/', (req, res) => {
     res.json({ message: 'Welcome to the API routes' });
 });
 
