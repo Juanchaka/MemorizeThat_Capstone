@@ -13,7 +13,7 @@ import HighScore from "./components/HighScore.jsx";
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename="/memorizethat">
         <Navbar />
         <div className="app-container">
           <Routes>
