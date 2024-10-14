@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_APP_API_URL || 'https://memorize-that.onrender.com';
+const API_URL = process.env.NODE_ENV === 'production'
+  ? (import.meta.env.VITE_APP_API_URL || 'https://memorize-that.onrender.com')
+  : '/api';
 
 const authHeader = () => {
   const token = localStorage.getItem('token');
@@ -23,12 +25,12 @@ export const startGame = async () => {
   }
 };
 
-export const endGame = async (gameId, moves, timeElapsed) => {
+export const endGame = async (gameId, moves, timeElapsed, won) => {
   if (!gameId) {
     throw new Error('No game ID provided');
   }
   try {
-    const response = await axios.post(`${API_URL}/game/${gameId}`, { moves, timeElapsed }, {
+    const response = await axios.post(`${API_URL}/game/${gameId}`, { moves, timeElapsed, won }, {
       headers: authHeader()
     });
     return response.data;

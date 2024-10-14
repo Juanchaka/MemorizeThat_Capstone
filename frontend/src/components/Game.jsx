@@ -31,7 +31,9 @@ function Game() {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [time, setTime] = useState(0);
+  const [endTime, setEndTime] = useState(null);
   const [gameId, setGameId] = useState(null);
+  const [gameEnded, setGameEnded] = useState(false);
 
   const flipSound = useRef(new Audio(`${import.meta.env.BASE_URL}card_sound/cardFlip/cardFlip.mp3`));
   
@@ -73,13 +75,13 @@ function Game() {
 
   useEffect(() => {
     let timer;
-    if (!gameOver && gameId) {
+    if (!gameOver && gameId && matchedCards.length !== cards.length) {
       timer = setInterval(() => {
         setTime((prevTime) => prevTime + 1);
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [gameOver, gameId]);
+  }, [gameOver, gameId, matchedCards.length !== cards.length]);
 
   useEffect(() => {
     const handleUserInteraction = () => {
@@ -102,9 +104,8 @@ function Game() {
 
       const newGame = await startGame();
       setGameId(newGame.id);
-      const newCards = shuffleCards(generateCards(8));
+      const newCards = shuffleCards(generateCards(1));
       setCards(newCards);
-
       preloadImages(newCards);
       setFlippedCards([]);
       setMatchedCards([]);
@@ -112,6 +113,7 @@ function Game() {
       setScore(0);
       setTime(0);
       setGameOver(false);
+      setGameEnded(false);
 
       setTimeout(() => {
         playSoundWithTimeout(gameStartSound.current, 1150);
@@ -159,12 +161,17 @@ function Game() {
         setScore(score + 10);
         setFlippedCards([]);
 
-        if (newMatchedCards.length === cards.length) {
-          setTimeout(() => {
+        console.log('Matched cards:', newMatchedCards.length, 'Total cards:', cards.length);
+
+        setTimeout(() => {
+          if (newMatchedCards.length === cards.length) {
+            console.log('All cards matched in handleCardClick');
+            setEndTime(Date.now())
             playSoundWithTimeout(gameCompleteSound.current, 2000);
-            endCurrentGame();
-          }, 2000);
-        }
+            endCurrentGame(true);
+          }
+        }, 2000);
+        
       } else {
         playSoundWithTimeout(noMatchSound.current, 600);
         setTimeout(() => setFlippedCards([]), 1000);
@@ -172,11 +179,32 @@ function Game() {
     }
   };
 
-  const endCurrentGame = async () => {
+  const endCurrentGame = async (won = false) => {
+    console.log('Entering endCurrentGame:', { gameEnded, won, gameId, moves, time  });
+    if (gameEnded) {
+      console.log('Game already ended, returning');
+      return;
+    }
+    console.log('Setting game states');
+    setGameEnded(true);
     setGameOver(true);
+
+      [flipSound, matchSound, noMatchSound, gameStartSound, gameCompleteSound, endGameSound].forEach(sound => {
+    sound.current.pause();
+    sound.current.currentTime = 0;
+  });
+
     playSoundWithTimeout(endGameSound.current, 1900);
     try {
-      await endGame(gameId, moves, time);
+      setMoves(currentMoves => {
+        const finalTime = endTime ? Math.floor((Date.now() - endTime) / 1000) + time : time;
+        console.log('Ending game with:', { gameId, moves: currentMoves, time: finalTime, won });
+        endGame(gameId, currentMoves, finalTime, won).then(result => {
+          console.log('End game result:', result);
+        });
+        return currentMoves;
+      });
+
     } catch (error) {
       console.error("Failed to end game:", error);
     }
@@ -203,7 +231,7 @@ function Game() {
           <span>Score: {score}</span>
           <span>Time: {time} seconds</span>
           <span>Moves: {moves}</span>
-        <button className="end-game-button" onClick={endCurrentGame}>
+        <button className="end-game-button" onClick={() => endCurrentGame(false)}>
           End Game
         </button>
         </div>
