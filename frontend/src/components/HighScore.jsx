@@ -38,12 +38,12 @@ function HighScore() {
     <div className="content-container">
     <div className="high-score-container">
       <div className="high-score-content">
-        <h2>Your High Scores</h2>
+        <h2>Your Fatests times</h2>
         <table className="high-score-table">
           <thead>
             <tr>
               <th>Rank</th>
-              <th>Score</th>
+              <th>Moves</th>
               <th>Time</th>
             </tr>
           </thead>
@@ -51,7 +51,7 @@ function HighScore() {
             {highScores.map((entry, index) => (
               <tr key={entry._id}>
                 <td>{index + 1}</td>
-                <td>{entry.score}</td>
+                <td>{entry.moves}</td>
                 <td>{entry.timeElapsed ? `${entry.timeElapsed}s` : 'N/A'}</td>
               </tr>
             ))}

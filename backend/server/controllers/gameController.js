@@ -13,10 +13,10 @@ export const startGame = async (req, res) => {
 export const endGame = async (req, res) => {
     try {
         const gameId = req.params.id;
-        const { score, timeElapsed } = req.body;
+        const { moves, timeElapsed } = req.body;
         const updatedGame = await GameSession.findByIdAndUpdate(
             gameId,
-            { score, timeElapsed, completed: true },
+            { moves, timeElapsed, completed: true },
             { new: true }
         );
         if(!updatedGame) {
@@ -35,7 +35,7 @@ export const gameHistory = async (req, res) => {
             completed: true
         })
         .populate('user', 'username')
-        .sort({ score: -1, timeElapsed: 1 })
+        .sort({ moves: 1, timeElapsed: 1 })
         .limit(10);
         res.json(games);
     } catch (err) {

@@ -176,7 +176,7 @@ function Game() {
     setGameOver(true);
     playSoundWithTimeout(endGameSound.current, 1900);
     try {
-      await endGame(gameId, score, time);
+      await endGame(gameId, moves, time);
     } catch (error) {
       console.error("Failed to end game:", error);
     }

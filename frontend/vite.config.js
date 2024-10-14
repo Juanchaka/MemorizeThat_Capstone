@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.NODE_ENV === 'production' ? '/MemorizeThat_Capstone/' : '/',
+  base: process.env.NODE_ENV === 'production' ? '/MemorizeThat_Capstone/' : 'process.dev.env.VITE_APP_API_URL',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',

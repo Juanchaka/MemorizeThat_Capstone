@@ -6,7 +6,7 @@ const gameSessionSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    score: {
+    moves: {
         type: Number,
         default: 0
     },
@@ -24,7 +24,7 @@ const gameSessionSchema = new mongoose.Schema({
     }
 });
 
-gameSessionSchema.index({ user: 1, score: -1 });
+gameSessionSchema.index({ user: 1, moves: 1, timeElapsed: 1 });
 
 const GameSession = mongoose.model('GameSession', gameSessionSchema);
 
