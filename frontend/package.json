@@ -7,7 +7,7 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "cross-env NODE_ENV=production gh-pages -d dist",
-    "dev": "cross-env NODE_ENV=development vite",
+    "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview",
     "build": "cross-env NODE_ENV=production vite build"
