@@ -104,7 +104,7 @@ function Game() {
 
       const newGame = await startGame();
       setGameId(newGame.id);
-      const newCards = shuffleCards(generateCards(1));
+      const newCards = shuffleCards(generateCards(8));
       setCards(newCards);
       preloadImages(newCards);
       setFlippedCards([]);
