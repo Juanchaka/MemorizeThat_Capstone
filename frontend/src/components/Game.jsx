@@ -161,11 +161,8 @@ function Game() {
         setScore(score + 10);
         setFlippedCards([]);
 
-        console.log('Matched cards:', newMatchedCards.length, 'Total cards:', cards.length);
-
         setTimeout(() => {
           if (newMatchedCards.length === cards.length) {
-            console.log('All cards matched in handleCardClick');
             setEndTime(Date.now())
             playSoundWithTimeout(gameCompleteSound.current, 2000);
             endCurrentGame(true);
@@ -180,16 +177,13 @@ function Game() {
   };
 
   const endCurrentGame = async (won = false) => {
-    console.log('Entering endCurrentGame:', { gameEnded, won, gameId, moves, time  });
     if (gameEnded) {
-      console.log('Game already ended, returning');
       return;
     }
-    console.log('Setting game states');
     setGameEnded(true);
     setGameOver(true);
 
-      [flipSound, matchSound, noMatchSound, gameStartSound, gameCompleteSound, endGameSound].forEach(sound => {
+    [flipSound, matchSound, noMatchSound, gameStartSound, gameCompleteSound, endGameSound].forEach(sound => {
     sound.current.pause();
     sound.current.currentTime = 0;
   });
@@ -198,9 +192,7 @@ function Game() {
     try {
       setMoves(currentMoves => {
         const finalTime = endTime ? Math.floor((Date.now() - endTime) / 1000) + time : time;
-        console.log('Ending game with:', { gameId, moves: currentMoves, time: finalTime, won });
         endGame(gameId, currentMoves, finalTime, won).then(result => {
-          console.log('End game result:', result);
         });
         return currentMoves;
       });

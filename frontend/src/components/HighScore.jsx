@@ -23,9 +23,6 @@ function HighScore() {
     try {
       setLoading(true);
       const data = await getGameHistory();
-
-      console.log('Raw high scores data:', JSON.stringify(data, null, 2));
-
       setHighScores(data);
     } catch (err) {
       setError('Failed to fetch high scores');
@@ -51,8 +48,8 @@ function HighScore() {
             </tr>
           </thead>
           <tbody>
-            {highScores.map((entry, index) => (
-              <tr key={entry._id}>
+            {highScores.map((entry) => (
+              <tr key={entry.rank}>
                 <td>{entry.rank}</td>
                 <td>{entry.moves}</td>
                 <td>{entry.timeElapsed ? `${entry.timeElapsed}s` : 'N/A'}</td>
