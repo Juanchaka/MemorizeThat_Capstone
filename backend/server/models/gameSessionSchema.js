@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { mongo } from 'mongoose';
 
 const gameSessionSchema = new mongoose.Schema({
     user: {
@@ -15,10 +15,6 @@ const gameSessionSchema = new mongoose.Schema({
         default: 0
     },
     completed: {
-        type: Boolean,
-        default: false
-    },
-    won: {
         type: Boolean,
         default: false
     },
