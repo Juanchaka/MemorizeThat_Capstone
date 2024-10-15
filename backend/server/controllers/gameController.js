@@ -33,6 +33,7 @@ export const gameHistory = async (req, res) => {
         const games = await GameSession.find({
             user: req.user.id,
             completed: true,
+            won: true
         })
         .sort({ moves: 1, timeElapsed: 1 })
         .limit(10);
